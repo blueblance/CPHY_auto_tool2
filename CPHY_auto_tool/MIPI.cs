@@ -35,7 +35,7 @@ namespace CPHY_auto_tool
             framerate = 60;
             symbolrate = 1000 * 1E+6;
             pixelformat = 24;
-            Hbp_LP_blanking = Hsa_LP_blanking = Hfp_LP_blanking = V_LP_blanking = true;
+            Hbp_LP_blanking = Hsa_LP_blanking = Hfp_LP_blanking = V_LP_blanking = true; ///true = LP-11 , false = HS
             lp_freq = (double)10e+6;
 
         }
@@ -75,12 +75,22 @@ namespace CPHY_auto_tool
             this.LP_Low_voltage = lp_low;
         }
         
-        public void set_blanking_type(bool hsync , bool hbp , bool hfp , bool vblank)
+        public void set_blanking_type(bool hsync , bool hbp , bool hfp , bool vblank) ///  true = lp-11 ,false = hs
         {
             this.Hsa_LP_blanking = hsync;
             this.Hbp_LP_blanking = hbp;
             this.Hfp_LP_blanking = hfp;
             this.V_LP_blanking = vblank;
+        }
+
+        public void set_pixel_format(int pixelformat)
+        {
+            if (pixelformat == 24 || pixelformat == 18 || pixelformat == 16)
+            {
+                this.pixelformat = pixelformat;
+            }
+            else
+                this.pixelformat = 24;
         }
         ///
         /// 取得狀態

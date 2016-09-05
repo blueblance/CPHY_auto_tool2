@@ -23,6 +23,23 @@ namespace CPHY_auto_tool
             }
         }
 
+        public delegate void Settextboxcolorback(TextBox tb, Color cr);
+
+        public void Settextbox(TextBox tb , Color cr)
+        {
+            if (tb.InvokeRequired)
+            {
+                Settextboxcolorback sb = new Settextboxcolorback(Settextbox);
+                tb.BeginInvoke(sb, new object[] { tb, cr });
+            }
+            else
+            {
+                tb.BackColor = cr;
+            }
+        }
+
+        
+
         public delegate void DisplayOnPictureBoxcallback(PictureBox pb, Bitmap Bp);
         public void DisplayOnPictureBox(PictureBox pb, Bitmap Bp)
         {
