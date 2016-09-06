@@ -14,7 +14,8 @@ namespace CPHY_auto_tool
         private static double symbol_bitrate = 2.28;
         private double HS_High_voltage, HS_Low_voltage, LP_Low_voltage, LP_High_voltage , symbolrate , framerate ,lp_freq;
         private int hbp, hfp, hsa, hact, vbp, vfp, vsa, vact, lane , pixelformat;
-        private bool Hbp_LP_blanking, Hsa_LP_blanking, Hfp_LP_blanking, V_LP_blanking;
+        private bool Hbp_LP_blanking, Hsa_LP_blanking, Hfp_LP_blanking, V_LP_blanking , burst_mode , pulse_mode;
+        private enum videotype_select {nonburst_pulse , nonburst_event , burst_event };        
         private double linetime;
 
 
@@ -37,6 +38,7 @@ namespace CPHY_auto_tool
             pixelformat = 24;
             Hbp_LP_blanking = Hsa_LP_blanking = Hfp_LP_blanking = V_LP_blanking = true; ///true = LP-11 , false = HS
             lp_freq = (double)10e+6;
+            
 
         }
 
@@ -92,6 +94,16 @@ namespace CPHY_auto_tool
             else
                 this.pixelformat = 24;
         }
+
+        public void set_videotype(bool pulsemode)
+        {            
+            this.pulse_mode = pulsemode;
+        }
+
+        public void set_video_burst(bool burstmode)
+        {
+            this.burst_mode = burstmode;
+        }
         ///
         /// 取得狀態
         ///
@@ -134,7 +146,16 @@ namespace CPHY_auto_tool
             return blanking_type;
         }
 
+        public bool[] get_video_type() // arg1 : burst mode , arg2 pulse mode
+        {
+            bool[] video_type = { burst_mode, pulse_mode };
+            return video_type;
+        }
 
+        public int get_pixel_format()
+        {
+            return pixelformat;
+        }
 
 
 

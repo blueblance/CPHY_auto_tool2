@@ -54,5 +54,23 @@ namespace CPHY_auto_tool
             }
 
         }
+
+        public delegate void changechecklistboxcallback(CheckedListBox cb, int item ,bool check);
+
+        public void changechecklistbox(CheckedListBox cb, int item, bool check)
+        {
+            if (cb.InvokeRequired)
+            {
+                changechecklistboxcallback Db = new changechecklistboxcallback(changechecklistbox);
+                cb.BeginInvoke(Db, new object[] { cb, item , check });
+                
+            }
+            else
+            {
+                cb.SetItemChecked(item, check);
+            }
+        }
+
+
     }
 }
