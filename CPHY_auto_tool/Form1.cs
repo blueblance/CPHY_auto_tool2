@@ -15,8 +15,9 @@ namespace CPHY_auto_tool
 {
     public partial class Form1 : Form
     {
-        
 
+        public static int[] auto_seq = new int[100];
+        public static string[ , ]auto_seq_arg = new string[100 , 2];
         public static OpenFileDialog open_lcm_init_file = new OpenFileDialog();
         public static MIPI dut = new MIPI();
         public static PG_control pgcontrol = new PG_control();
@@ -48,6 +49,7 @@ namespace CPHY_auto_tool
             ParameterizedThreadStart myPar = new ParameterizedThreadStart(video_auto);
             Thread myThread01 = new Thread(myPar);
             myThread01.Start(1200);
+            
 
 
         }
@@ -58,7 +60,7 @@ namespace CPHY_auto_tool
             target_symbol_rate = target_symbol_rate * 1000000;
 
                         
-            while (dut.cnt_symbolrate() < 1200*1E6)
+            while (dut.cnt_symbolrate() < target_symbol_rate)
             {
                 pgcontrol.set_prameter(dut);
                 int[] porch = dut.get_porch_setting();
@@ -153,7 +155,15 @@ namespace CPHY_auto_tool
 
         private void btn_video_auto_Click(object sender, EventArgs e)
         {
-            checklistbox_videotype.SetItemChecked(0, false);
+            for (int i = 0; i < Convert.ToInt32(textbox_auto_script_loopcnt.Text); i++)
+            {
+                auto_seq[i] = ((ComboBox)this.Controls.Find("combox_script" + i, true)[0]).SelectedIndex;
+                auto_seq_arg[i, 0] = ((TextBox)this.Controls.Find("textbox_combox_script" + i + "0", true)[0]).Text;
+                auto_seq_arg[i, 1] = ((TextBox)this.Controls.Find("textbox_combox_script" + i + "1", true)[0]).Text;
+            }
+            ThreadStart auto_seq_thread = new ThreadStart(auto_script_method);
+            Thread p = new Thread(auto_seq_thread);
+            p.Start();
         }
 
         private void btn_load_ini_Click(object sender, EventArgs e)
@@ -263,7 +273,11 @@ namespace CPHY_auto_tool
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (textbox_auto_script_loopcnt.Text == "")
+                return;
+
             int i = Convert.ToInt32(textbox_auto_script_loopcnt.Text);
+
             ComboBox[] auto_script = new ComboBox[i];
 
             for(int k = 0; k < i; k++)
@@ -291,12 +305,13 @@ namespace CPHY_auto_tool
         private void ComboBox_selectchanged(object sender , System.EventArgs s)
         {
             TextBox[] auto_script_arg = new TextBox[2];            
-            ComboBox cb = (ComboBox)sender;
-            cb.BackColor = Color.Red;
+            ComboBox cb = (ComboBox)sender;            
             textBox1.Text = ((ComboBox)(sender)).Name.ToString();
+            
                       
             for(int i = 0; i < 2; i++)
             {
+                
                 string cbname = ((ComboBox)(sender)).Name;
                 auto_script_arg[i] = new TextBox();
                 auto_script_arg[i].Name = "textbox_" + cbname + i;
@@ -310,7 +325,88 @@ namespace CPHY_auto_tool
 
         public void auto_script_method()
         {
+            if (textbox_auto_script_loopcnt.Text == "")
+                return;
+            int loop_cnt = Convert.ToInt32(textbox_auto_script_loopcnt.Text);            
+            ThreadStart[] auto_th = new ThreadStart[loop_cnt];
+            //Thread[] auto_thread = new Thread[loop_cnt];            
+            for (int i = 0; i<loop_cnt; i++)
+            {
+                switch(auto_seq[i])
+                {
+                    case 0:
+                        ParameterizedThreadStart test_thread1 = new ParameterizedThreadStart(cnt_test);
+                        Thread mythread = new Thread(test_thread1);
+                        mythread.Start(i);
+                        mythread.Join();
+                        break;
+                    case 1:
+                        ThreadStart auto = new ThreadStart(cnt_test2);
+                        Thread mythread2 = new Thread(auto);
+                        mythread2.Start();
+                        mythread2.Join();
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    
+                                               
 
+                }
+                    
+                //((ComboBox)this.Controls.Find("combox_script" + i, true)[0]).SelectedIndex;
+                //((ComboBox)this.Controls.Find("combox_script" + i, true)[0])
+            }
+            
+        }
+
+        public void cnt_test(object o)
+        {
+            int seq_number = Convert.ToInt32(o);
+            from_delegate formcontrol = new from_delegate();
+            for(int i = Convert.ToInt32(auto_seq_arg[seq_number, 0]); i < Convert.ToInt32(auto_seq_arg[seq_number, 1]); i++)
+            {
+
+                formcontrol.Settextbox(textBox1, i.ToString());
+                Thread.Sleep(50);
+
+            }
+        }
+        public void cnt_test2()
+        {
+            from_delegate formcontrol = new from_delegate();
+            for (int i = 0; i < 100; i++)
+            {
+                formcontrol.Settextbox(textbox_hact, i.ToString());
+                Thread.Sleep(50);
+
+            }
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            for(int i = 0; i < Convert.ToInt32(textbox_auto_script_loopcnt.Text); i++)
+            {
+                auto_seq[i] = ((ComboBox)this.Controls.Find("combox_script" + i, true)[0]).SelectedIndex;
+                auto_seq_arg[i, 0] = ((TextBox)this.Controls.Find("textbox_combox_script" + i + "0", true)[0]).Text;
+                auto_seq_arg[i, 1] = ((TextBox)this.Controls.Find("textbox_combox_script" + i + "1", true)[0]).Text;
+            }
+        }
+
+        private void checkedListBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (checkedListBox2.GetItemChecked(0))
+            {
+                checklistbox_pixelstream.Visible = true;
+                checklistbox_videotype.Visible = true;
+            }
+            else
+            {
+                checklistbox_pixelstream.Visible = false;
+                checklistbox_videotype.Visible = false;
+            }
         }
     }
 }

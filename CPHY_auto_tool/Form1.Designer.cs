@@ -65,6 +65,7 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textbox_auto_script_loopcnt = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -312,6 +313,7 @@
             // 
             // checklistbox_videotype
             // 
+            this.checklistbox_videotype.CheckOnClick = true;
             this.checklistbox_videotype.FormattingEnabled = true;
             this.checklistbox_videotype.Items.AddRange(new object[] {
             "LP Event mode",
@@ -324,9 +326,11 @@
             this.checklistbox_videotype.Name = "checklistbox_videotype";
             this.checklistbox_videotype.Size = new System.Drawing.Size(144, 106);
             this.checklistbox_videotype.TabIndex = 0;
+            this.checklistbox_videotype.Visible = false;
             // 
             // checkedListBox2
             // 
+            this.checkedListBox2.CheckOnClick = true;
             this.checkedListBox2.FormattingEnabled = true;
             this.checkedListBox2.Items.AddRange(new object[] {
             "Video_mode",
@@ -337,9 +341,11 @@
             this.checkedListBox2.Name = "checkedListBox2";
             this.checkedListBox2.Size = new System.Drawing.Size(144, 72);
             this.checkedListBox2.TabIndex = 1;
+            this.checkedListBox2.SelectedIndexChanged += new System.EventHandler(this.checkedListBox2_SelectedIndexChanged);
             // 
             // checklistbox_pixelstream
             // 
+            this.checklistbox_pixelstream.CheckOnClick = true;
             this.checklistbox_pixelstream.FormattingEnabled = true;
             this.checklistbox_pixelstream.Items.AddRange(new object[] {
             "24bit",
@@ -349,6 +355,7 @@
             this.checklistbox_pixelstream.Name = "checklistbox_pixelstream";
             this.checklistbox_pixelstream.Size = new System.Drawing.Size(144, 55);
             this.checklistbox_pixelstream.TabIndex = 2;
+            this.checklistbox_pixelstream.Visible = false;
             // 
             // progressBar1
             // 
@@ -401,11 +408,22 @@
             this.textbox_auto_script_loopcnt.Size = new System.Drawing.Size(74, 22);
             this.textbox_auto_script_loopcnt.TabIndex = 31;
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(653, 383);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 30;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1374, 659);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.textbox_symrate);
             this.Controls.Add(this.textbox_framerate);
@@ -480,6 +498,7 @@
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox textbox_auto_script_loopcnt;
+        private System.Windows.Forms.Button button3;
     }
 }
 

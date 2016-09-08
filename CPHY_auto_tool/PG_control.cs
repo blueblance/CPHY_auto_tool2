@@ -29,13 +29,26 @@ namespace CPHY_auto_tool
             if(rc <0)
             {
                 return 0;
-            }
+            }            
             int[] porch = mipi.get_porch_setting();
             double fr = mipi.get_framerate();
             double[] phy_volt = mipi.get_phy_volt();
             bool[] video_type = mipi.get_video_type();
             bool[] blanking_type = mipi.get_blanking_type();
-            
+
+            //**HS,LP電壓,symbol rate , lp freq , lane數
+            RPCCmd(RPCCmds.START_EDIT_CONFIG);
+            RPCCmd(RPCCmds.SET_DT_MODE, RPCDefs.DT_HS);
+            RPCCmd(RPCCmds.SET_LP_FREQ, mipi.get_lp_freq());
+            RPCCmd(RPCCmds.SET_HS_SYM_RATE, mipi.get_symbolrate());
+            RPCCmd(RPCCmds.SET_LANE_CNT, mipi.get_lane());
+            RPCCmd(RPCCmds.SET_HS_HIGH_VOLT, 1, phy_volt[0]);
+            RPCCmd(RPCCmds.SET_HS_LOW_VOLT, 1, phy_volt[1]);
+            RPCCmd(RPCCmds.SET_LP_HIGH_VOLT, phy_volt[2]);
+            RPCCmd(RPCCmds.SET_LP_LOW_VOLT, phy_volt[3]);
+            RPCCmd(RPCCmds.END_EDIT_CONFIG);
+
+
             ///porch,resolution寫進PG
             RPCCmd(RPCCmds.SET_TIMING_HBPORCH, porch[0]);
             RPCCmd(RPCCmds.SET_TIMING_HFPORCH, porch[1]);
@@ -45,11 +58,8 @@ namespace CPHY_auto_tool
             RPCCmd(RPCCmds.SET_TIMING_VFPORCH, porch[5]);
             RPCCmd(RPCCmds.SET_TIMING_VSYNC, porch[6]);                        
             RPCCmd(RPCCmds.SET_TIMING_VACTIVE, porch[7]);
-            //HS Swing , LP Volt寫進
-            RPCCmd(RPCCmds.SET_HS_HIGH_VOLT, 1, phy_volt[0]);
-            RPCCmd(RPCCmds.SET_HS_LOW_VOLT, 1, phy_volt[1]);
-            RPCCmd(RPCCmds.SET_LP_HIGH_VOLT, phy_volt[2]);
-            RPCCmd(RPCCmds.SET_LP_LOW_VOLT, phy_volt[3]);
+            RPCCmd(RPCCmds.SET_TIMING_FRAME_RATE, mipi.get_framerate());
+
             ////Video type,blanking type寫入            
             RPCCmd(RPCCmds.SET_TIMING_ENABLE_DSI_BURST_MODE, video_type[0]);
             RPCCmd(RPCCmds.SET_TIMING_ENABLE_DSI_PULSE_MODE, video_type[1]);
@@ -57,7 +67,6 @@ namespace CPHY_auto_tool
             RPCCmd(RPCCmds.SET_TIMING_HBPORCH_BLANKING_MODE, blanking_type[1] ? 1 : 2);
             RPCCmd(RPCCmds.SET_TIMING_HFPORCH_BLANKING_MODE, blanking_type[2] ? 1 : 2);
             RPCCmd(RPCCmds.SET_TIMING_VERTICAL_BLANKING_MODE, blanking_type[3] ? 1 : 2);
-            ///pixel format寫入
 
             return 0;
 

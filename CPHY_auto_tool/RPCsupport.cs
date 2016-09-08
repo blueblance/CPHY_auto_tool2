@@ -38,5 +38,11 @@ namespace CPHY_auto_tool
         {
             return (PE(client.RPCCmd(cmdCode, arg1, arg2, arg3, arg4, ref m_eMsg, ref m_sMsg)));
         }
+
+        // Define RPCCmd shorthand (no arguments)
+        public static int RPCCmd(int cmdCode)
+        {
+            return (PE(client.RPCCmd(cmdCode, ref m_eMsg, ref m_sMsg)));
+        }
     }
 }
